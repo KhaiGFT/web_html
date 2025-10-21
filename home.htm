@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -11,8 +11,13 @@
     .field { margin-top:16px; }
     label { display:block; font-size:14px; margin-bottom:6px; }
     input[type="text"] { width:100%; padding:10px 12px; border:1px solid #d0d7de; border-radius:6px; font-size:14px; box-sizing:border-box; }
-    .meta { margin-top:18px; font-size:13px; color:#666; }
+    .meta { margin-top:18px; font-size:13px; color:#666; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
     a { color:#0066cc; text-decoration:none; }
+    .btn { padding:8px 12px; border-radius:6px; border:1px solid #cbd5e1; background:#fff; cursor:pointer; font-size:13px; }
+    .btn-primary { background:#0066cc; color:#fff; border-color:#005bb5; }
+    .btn-outline { background:#fff; color:#333; }
+    .saved-list { margin-top:12px; margin-left:0; font-size:14px; color:#333; }
+    .saved-row { padding:8px 10px; border-radius:6px; background:#f7f9fb; border:1px solid #e6eef8; margin-top:8px; }
   </style>
 </head>
 <body>
@@ -21,12 +26,57 @@
 
     <div class="field">
       <label for="sampleInput">Sample</label>
-      <input id="sampleInput" name="sample" type="text" placeholder="Nhập nội dung mẫu" />
+      <input id="sampleInput" name="sample" type="text" placeholder="Sample text" />
+    </div>
+    <div class="meta">
+      <button id="saveBtn" class="btn btn-primary" type="button">Save</button>
+      <button id="resetBtn" class="btn btn-outline" type="button">Reset</button>
     </div>
 
     <div class="meta">
       <a href="login.htm">← Back to Login</a>
     </div>
+
+    <!-- Saved rows will appear here -->
+    <div id="savedList" class="saved-list" aria-live="polite"></div>
   </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var input = document.getElementById('sampleInput');
+      var saveBtn = document.getElementById('saveBtn');
+      var resetBtn = document.getElementById('resetBtn');
+      var savedList = document.getElementById('savedList');
+
+      function addRow(text) {
+        var row = document.createElement('div');
+        row.className = 'saved-row';
+        row.textContent = text;
+        savedList.appendChild(row);
+      }
+
+      saveBtn.addEventListener('click', function () {
+        var v = input.value.trim();
+        if (!v) return;
+        addRow(v);
+        input.value = '';
+        input.focus();
+      });
+
+      resetBtn.addEventListener('click', function () {
+        input.value = '';
+        savedList.innerHTML = '';
+        input.focus();
+      });
+
+      // Pressing Enter in the input will save
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          saveBtn.click();
+        }
+      });
+    });
+  </script>
 </body>
 </html>

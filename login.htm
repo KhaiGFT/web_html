@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="vi">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -64,7 +64,7 @@
       background: linear-gradient(90deg,#f7fbff,#eef6ff);
     }
 
-    /* Khung thông báo lỗi ở bên phải */
+    /* Error box on the right */
     .error-box {
       width: 90%;
       min-height: 120px;
@@ -77,16 +77,16 @@
       box-sizing: border-box;
       font-weight: 600;
       font-size: 16px;
-      color: #b00020; /* đỏ */
+      color: #b00020; /* red */
       border: 1px solid rgba(176,0,32,0.12);
       background: rgba(176,0,32,0.04);
-      visibility: hidden; /* ẩn mặc định */
+      visibility: hidden; /* hidden by default */
     }
 
-    /* hiển thị khi có lỗi */
+    /* shown when there is an error */
     .error-box.show { visibility: visible; }
 
-    /* nhỏ hơn màn hình di động */
+    /* smaller screens / mobile */
     @media (max-width:700px) {
       .container { flex-direction: column; }
       .form-wrap, .aside { width: 100%; }
@@ -97,14 +97,14 @@
 <body>
   <div class="container" role="main">
     <div class="form-wrap" aria-labelledby="loginTitle">
-      <h2 id="loginTitle">Đăng nhập</h2>
+      <h2 id="loginTitle">Login</h2>
 
       <form id="loginForm" autocomplete="off" novalidate>
-        <label for="username">User name</label>
-        <input id="username" name="username" type="text" placeholder="Nhập user name" required />
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" placeholder="Enter username" required />
 
         <label for="password">Password</label>
-        <input id="password" name="password" type="password" placeholder="Nhập password" required />
+        <input id="password" name="password" type="password" placeholder="Enter password" required />
 
         <button type="submit">Login</button>
       </form>
@@ -112,7 +112,7 @@
 
     <div class="aside">
       <div id="errorBox" class="error-box" aria-live="polite">
-        Invalid user name or password.
+        Invalid username or password.
       </div>
     </div>
   </div>
@@ -134,24 +134,24 @@
       }
 
       form.addEventListener('submit', function(ev) {
-        ev.preventDefault(); // ngăn form submit mặc định
+        ev.preventDefault(); // prevent default form submission
 
         const user = (usernameInput.value || '').trim();
         const pass = (passwordInput.value || '').trim();
 
-        // kiểm tra đơn giản trên client
+        // simple client-side check
         if (user === 'admin' && pass === 'admin') {
-          // đăng nhập thành công -> chuyển trang
+          // login success -> navigate to home
           hideError();
-          // Dùng location.href để chuyển tới home.htm (file cần nằm cùng thư mục)
+          // Use location.href to go to home.htm (file should be in the same folder)
           window.location.href = 'home.htm';
         } else {
-          // đăng nhập sai -> hiển thị text đỏ bên phải
-          showError('invalid user...');
+          // login failed -> show error on the right
+          showError('Invalid username or password.');
         }
       });
 
-      // Ẩn lỗi khi người dùng sửa input
+      // Hide error when user edits inputs
       usernameInput.addEventListener('input', hideError);
       passwordInput.addEventListener('input', hideError);
     })();
