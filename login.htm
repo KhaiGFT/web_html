@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      width: 720px;
+      max-width: 95%;
+      background: white;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      border-radius: 8px;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .form-wrap {
+      padding: 32px;
+      width: 50%;
+      box-sizing: border-box;
+    }
+
+    h2 { margin: 0 0 16px 0; font-size: 20px; }
+    label { display:block; margin-top:12px; font-size:14px; }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top:6px;
+      box-sizing: border-box;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    button {
+      margin-top: 16px;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+      background: #0066cc;
+      color: white;
+    }
+
+    .aside {
+      width: 50%;
+      padding: 32px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(90deg,#f7fbff,#eef6ff);
+    }
+
+    /* Khung thông báo lỗi ở bên phải */
+    .error-box {
+      width: 90%;
+      min-height: 120px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 12px;
+      box-sizing: border-box;
+      font-weight: 600;
+      font-size: 16px;
+      color: #b00020; /* đỏ */
+      border: 1px solid rgba(176,0,32,0.12);
+      background: rgba(176,0,32,0.04);
+      visibility: hidden; /* ẩn mặc định */
+    }
+
+    /* hiển thị khi có lỗi */
+    .error-box.show { visibility: visible; }
+
+    /* nhỏ hơn màn hình di động */
+    @media (max-width:700px) {
+      .container { flex-direction: column; }
+      .form-wrap, .aside { width: 100%; }
+      .aside { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" role="main">
+    <div class="form-wrap" aria-labelledby="loginTitle">
+      <h2 id="loginTitle">Đăng nhập</h2>
+
+      <form id="loginForm" autocomplete="off" novalidate>
+        <label for="username">User name</label>
+        <input id="username" name="username" type="text" placeholder="Nhập user name" required />
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="Nhập password" required />
+
+        <button type="submit">Login</button>
+      </form>
+    </div>
+
+    <div class="aside">
+      <div id="errorBox" class="error-box" aria-live="polite">
+        Invalid user name or password.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const form = document.getElementById('loginForm');
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      const errorBox = document.getElementById('errorBox');
+
+      function showError(message) {
+        errorBox.textContent = message;
+        errorBox.classList.add('show');
+      }
+
+      function hideError() {
+        errorBox.classList.remove('show');
+      }
+
+      form.addEventListener('submit', function(ev) {
+        ev.preventDefault(); // ngăn form submit mặc định
+
+        const user = (usernameInput.value || '').trim();
+        const pass = (passwordInput.value || '').trim();
+
+        // kiểm tra đơn giản trên client
+        if (user === 'admin' && pass === 'admin') {
+          // đăng nhập thành công -> chuyển trang
+          hideError();
+          // Dùng location.href để chuyển tới home.htm (file cần nằm cùng thư mục)
+          window.location.href = 'home.htm';
+        } else {
+          // đăng nhập sai -> hiển thị text đỏ bên phải
+          showError('invalid user...');
+        }
+      });
+
+      // Ẩn lỗi khi người dùng sửa input
+      usernameInput.addEventListener('input', hideError);
+      passwordInput.addEventListener('input', hideError);
+    })();
+  </script>
+</body>
+</html>
