@@ -176,6 +176,16 @@
   </div>
 
   <script>
+    // Add new date formatting utility at start of script
+    function formatDateForDisplay(dateStr) {
+        if (!dateStr) return '""';
+        const date = new Date(dateStr);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
+
     // Utility: set text safely
     function setValueText(elId, text) {
       const el = document.getElementById(elId);
@@ -185,63 +195,62 @@
 
     // Update logic for different control types
     function updateValueForControl(control) {
-      const targetId = control.getAttribute('data-target');
-      if (!targetId) return;
-      const tag = control.tagName.toLowerCase();
-      const type = (control.getAttribute('type') || '').toLowerCase();
+        const targetId = control.getAttribute('data-target');
+        if (!targetId) return;
+        const tag = control.tagName.toLowerCase();
+        const type = (control.getAttribute('type') || '').toLowerCase();
 
-      if (tag === 'input' && type === 'file') {
-        const files = Array.from(control.files || []).map(f => f.name);
-        setValueText(targetId, files.length ? files.join(', ') : 'No files');
-        return;
-      }
-
-      if (tag === 'select') {
-        if (control.multiple) {
-          const vals = Array.from(control.selectedOptions).map(o => o.value);
-          setValueText(targetId, JSON.stringify(vals));
-        } else {
-          setValueText(targetId, control.value || '""');
-        }
-        return;
-      }
-
-      if (type === 'checkbox') {
-        const name = control.name;
-        if (name) {
-          const group = document.querySelectorAll(`input[type="checkbox"][name="${CSS.escape(name)}"]`);
-          if (group.length > 1) {
-            const vals = Array.from(group).filter(c=>c.checked).map(c=>c.value);
-            setValueText(targetId, JSON.stringify(vals));
+        if (tag === 'input' && type === 'file') {
+            const files = Array.from(control.files || []).map(f => f.name);
+            setValueText(targetId, files.length ? files.join(', ') : 'No files');
             return;
-          }
         }
-        setValueText(targetId, control.checked);
-        return;
-      }
 
-      if (type === 'radio') {
-        const name = control.name;
-        if (name) {
-          const checked = document.querySelector(`input[type="radio"][name="${CSS.escape(name)}"]:checked`);
-          setValueText(targetId, checked ? checked.value : null);
-          return;
+        if (tag === 'select') {
+            if (control.multiple) {
+                const vals = Array.from(control.selectedOptions).map(o => o.value);
+                setValueText(targetId, JSON.stringify(vals));
+            } else {
+                setValueText(targetId, control.value || '""');
+            }
+            return;
         }
-        setValueText(targetId, control.checked);
-        return;
-      }
 
-      if (tag === 'input' || tag === 'textarea') {
-        setValueText(targetId, control.value);
-        return;
-      }
+        if (type === 'checkbox') {
+            const name = control.name;
+            if (name) {
+                const group = document.querySelectorAll(`input[type="checkbox"][name="${CSS.escape(name)}"]`);
+                if (group.length > 1) {
+                    const vals = Array.from(group).filter(c=>c.checked).map(c=>c.value);
+                    setValueText(targetId, JSON.stringify(vals));
+                    return;
+                }
+            }
+            setValueText(targetId, control.checked);
+            return;
+        }
 
-      if (control.isContentEditable) {
-        setValueText(targetId, control.textContent);
-        return;
-      }
+        if (type === 'radio') {
+            const name = control.name;
+            if (name) {
+                const checked = document.querySelector(`input[type="radio"][name="${CSS.escape(name)}"]:checked`);
+                setValueText(targetId, checked ? checked.value : null);
+                return;
+            }
+            setValueText(targetId, control.checked);
+            return;
+        }
 
-      setValueText(targetId, control.textContent || control.value || '');
+        if (tag === 'input' || tag === 'textarea') {
+            if (type === 'date') {
+                setValueText(targetId, formatDateForDisplay(control.value));
+                return;
+            }
+            setValueText(targetId, control.value || '""');
+            return;
+        }
+
+        setValueText(targetId, control.textContent || control.value || '');
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -311,7 +320,8 @@
         document.getElementById('interest_news').checked = true;
         document.getElementById('prio_med').checked = true;
         document.getElementById('select_one').value = 'option1';
-        document.getElementById('date_pick').value = new Date().toISOString().slice(0,10);
+        const targetDate = new Date(2025, 9, 30); // Month is 0-based, so 9 = October
+        document.getElementById('date_pick').value = targetDate.toISOString().slice(0,10);
         document.getElementById('color_picker').value = '#ff3366';
         document.getElementById('range_scale').value = 75;
         // trigger updates
