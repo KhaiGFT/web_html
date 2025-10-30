@@ -158,17 +158,32 @@
       </div>
     </div>
 
-    <!-- Row: Color & Range -->
+    <!-- Row: Color -->
     <div class="row">
       <div class="col-left">
-        <label class="label">Color & Range</label>
+        <label class="label">Color e</label>
         <div class="control">
           <input id="color_picker" name="color" data-target="value_color" data-testid="input-color" type="color" value="#3366ff" />
-          <input id="range_scale" name="scale" data-target="value_range" data-testid="input-range" type="range" min="0" max="100" value="50" />
+        
         </div>
       </div>
       <div class="col-right">
         <div id="value_color" class="value-box" data-testid="value-color">#3366ff</div>
+      
+      </div>
+    </div>
+
+    <!-- Row: Range -->
+    <div class="row">
+      <div class="col-left">
+        <label class="label">Range</label>
+        <div class="control">
+        
+          <input id="range_scale" name="scale" data-target="value_range" data-testid="input-range" type="range" min="0" max="100" value="50" />
+        </div>
+      </div>
+      <div class="col-right">
+      
         <div id="value_range" class="value-box" style="margin-top:8px" data-testid="value-range">50</div>
       </div>
     </div>
