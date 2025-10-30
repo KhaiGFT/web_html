@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Controls and Values - Sample for Automation</title>
+  <style>
+    :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;line-height:1.4}
+    body{margin:24px;background:#f7f8fb;color:#111}
+    .card{background:#fff;border:1px solid #e3e6ea;border-radius:8px;padding:16px;max-width:1100px;margin:0 auto;box-shadow:0 3px 8px rgba(20,30,50,0.06)}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+    h1{font-size:18px;margin:0}
+    .row{display:flex;border-top:1px solid #f0f2f5;padding:12px 0;gap:16px;align-items:center}
+    .row:first-of-type{border-top:0;padding-top:6px}
+    .col-left{flex:1;min-width:280px}
+    .col-right{width:320px;flex-shrink:0}
+    .label{display:block;font-weight:600;margin-bottom:6px}
+    .control{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .value-box{background:#fafbff;border:1px dashed #dfe7ff;padding:10px;border-radius:6px;min-height:36px;display:flex;align-items:center;gap:8px;white-space:pre-wrap}
+    small.note{color:#6b7280}
+    .two-cols-header{display:flex;gap:16px;padding:6px 0 12px;border-bottom:1px solid #eef2f7;margin-bottom:6px}
+    .header-left{flex:1;font-weight:700}
+    .header-right{width:320px;flex-shrink:0;font-weight:700}
+    .actions{display:flex;gap:8px}
+    input[type="text"],input[type="email"],input[type="number"],input[type="password"],select,textarea,input[type="search"],input[type="tel"],input[type="url"]{padding:8px 10px;border-radius:6px;border:1px solid #d0d6df;width:100%;box-sizing:border-box}
+    textarea{min-height:70px;resize:vertical}
+    .small{font-size:13px;color:#555}
+    .badge{background:#eef2ff;padding:2px 8px;border-radius:999px;font-size:12px;color:#1e3a8a}
+    .muted{color:#6b7280}
+  </style>
+</head>
+<body>
+  <div class="card" role="main">
+    <header>
+      <h1>Controls & Values — Sample Demo for Automation</h1>
+      <div class="actions">
+        <button id="resetAll" class="badge" title="Reset demo values">Reset</button>
+        <button id="prefill" class="badge" title="Prefill demo values">Prefill</button>
+      </div>
+    </header>
+
+    <div class="two-cols-header" aria-hidden="true">
+      <div class="header-left">Controls</div>
+      <div class="header-right">Value</div>
+    </div>
+
+    <!-- Row: Text input -->
+    <div class="row">
+      <div class="col-left">
+        <label class="label" for="input_text">Text Input</label>
+        <div class="control">
+          <input id="input_text" name="input_text" data-target="value_input_text" data-testid="input-text" type="text" placeholder="Type text and press Enter or blur" />
+          <small class="note">id, name, data-target provided</small>
+        </div>
+      </div>
+      <div class="col-right">
+        <div id="value_input_text" class="value-box" data-testid="value-input-text">""</div>
+      </div>
+    </div>
+
+    <!-- Row: Textarea -->
+    <div class="row">
+      <div class="col-left">
+        <label class="label" for="textarea_notes">Textarea</label>
+        <div class="control">
+          <textarea id="textarea_notes" name="notes" data-target="value_textarea" data-testid="textarea-notes" placeholder="Write notes..."></textarea>
+        </div>
+      </div>
+      <div class="col-right">
+        <div id="value_textarea" class="value-box" data-testid="value-textarea">""</div>
+      </div>
+    </div>
+
+    <!-- Row: Number -->
+    <div class="row">
+      <div class="col-left">
+        <label class="label" for="input_number">Number</label>
+        <div class="control">
+          <input id="input_number" name="qty" data-target="value_number" data-testid="input-number" type="number" min="0" max="999" value="0" />
+        </div>
+      </div>
+      <div class="col-right">
+        <div id="value_number" class="value-box" data-testid="value-number">0</div>
+      </div>
+    </div>
+
+    <!-- Row: Checkbox (single) -->
+    <div class="row">
+      <div class="col-left">
+        <label class="label">Checkbox / Toggle</label>
+        <div class="control">
+          <label><input id="chk_subscribe" name="subscribe" data-target="value_chk_subscribe" data-testid="checkbox-subscribe" type="checkbox" /> Subscribe</label>
+        </div>
+      </div>
+      <div class="col-right">
+        <div id="value_chk_subscribe" class="value-box" data-testid="value-checkbox">false</div>
+      </div>
+    </div>
+
+    <!-- Row: Checkbox group -->
+    <div class="row">
+      <div class="col-left">
+        <label class="label">Checkbox Group (interests)</label>
+        <div class="control" id="interest-group">
+          <label><input id="interest_news" name="interests" data-target="value_interests" data-testid="chk-interest" type="checkbox" value="news" /> News</label>
+          <label><input id="interest_updates" name="interests" data-target="value_interests" data-testid="chk-interest" type="checkbox" value="updates" /> Updates</label>
+          <label><input id="interest_offers" name="interests" data-target="value_interests" data-testid="chk-interest" type="checkbox" value="offers" /> Offers</label>
+        </div>
+      </div>
+      <div class="col-right">
+        <div id="value_interests" class="value-box" data-testid="value-interests">[]</div>
+      </div>
+    </div>
+
+    <!-- Row: Radio group -->
+    <div class="row">
+      <div class="col-left">
+        <label class="label">Radio Group (priority)</label>
+        <div class="control">
+          <label><input id="prio_low" name="priority" data-target="value_priority" data-testid="radio-prio" type="radio" value="low" /> Low</label>
+          <label><input id="prio_med" name="priority" data-target="value_priority" data-testid="radio-prio" type="radio" value="medium" /> Medium</label>
+          <label><input id="prio_high" name="priority" data-target="value_priority" data-testid="radio-prio" type="radio" value="high" /> High</label>
+        </div>
+      </div>
+      <div class="col-right">
+        <div id="value_priority" class="value-box" data-testid="value-priority">null</div>
+      </div>
+    </div>
+
+    <!-- Row: Select (Dropdown) -->
+    <div class="row">
+      <div class="col-left">
+        <label class="label" for="select_one">Select (Dropdown)</label>
+        <div class="control">
+          <select id="select_one" name="select_one" data-target="value_select_one" data-testid="select-one">
+            <option value="">-- choose an option --</option>
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-right">
+        <div id="value_select_one" class="value-box" data-testid="value-select-one">""</div>
+      </div>
+    </div>
+
+    <!-- Row: Date picker -->
+    <div class="row">
+      <div class="col-left">
+        <label class="label" for="date_pick">Date Picker</label>
+        <div class="control">
+          <input id="date_pick" name="date" data-target="value_date" data-testid="input-date" type="date" />
+        </div>
+      </div>
+      <div class="col-right">
+        <div id="value_date" class="value-box" data-testid="value-date">""</div>
+      </div>
+    </div>
+
+    <!-- Row: Color & Range -->
+    <div class="row">
+      <div class="col-left">
+        <label class="label">Color & Range</label>
+        <div class="control">
+          <input id="color_picker" name="color" data-target="value_color" data-testid="input-color" type="color" value="#3366ff" />
+          <input id="range_scale" name="scale" data-target="value_range" data-testid="input-range" type="range" min="0" max="100" value="50" />
+        </div>
+      </div>
+      <div class="col-right">
+        <div id="value_color" class="value-box" data-testid="value-color">#3366ff</div>
+        <div id="value_range" class="value-box" style="margin-top:8px" data-testid="value-range">50</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Utility: set text safely
+    function setValueText(elId, text) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      el.textContent = (text === undefined || text === null) ? '' : String(text);
+    }
+
+    // Update logic for different control types
+    function updateValueForControl(control) {
+      const targetId = control.getAttribute('data-target');
+      if (!targetId) return;
+      const tag = control.tagName.toLowerCase();
+      const type = (control.getAttribute('type') || '').toLowerCase();
+
+      if (tag === 'input' && type === 'file') {
+        const files = Array.from(control.files || []).map(f => f.name);
+        setValueText(targetId, files.length ? files.join(', ') : 'No files');
+        return;
+      }
+
+      if (tag === 'select') {
+        if (control.multiple) {
+          const vals = Array.from(control.selectedOptions).map(o => o.value);
+          setValueText(targetId, JSON.stringify(vals));
+        } else {
+          setValueText(targetId, control.value || '""');
+        }
+        return;
+      }
+
+      if (type === 'checkbox') {
+        const name = control.name;
+        if (name) {
+          const group = document.querySelectorAll(`input[type="checkbox"][name="${CSS.escape(name)}"]`);
+          if (group.length > 1) {
+            const vals = Array.from(group).filter(c=>c.checked).map(c=>c.value);
+            setValueText(targetId, JSON.stringify(vals));
+            return;
+          }
+        }
+        setValueText(targetId, control.checked);
+        return;
+      }
+
+      if (type === 'radio') {
+        const name = control.name;
+        if (name) {
+          const checked = document.querySelector(`input[type="radio"][name="${CSS.escape(name)}"]:checked`);
+          setValueText(targetId, checked ? checked.value : null);
+          return;
+        }
+        setValueText(targetId, control.checked);
+        return;
+      }
+
+      if (tag === 'input' || tag === 'textarea') {
+        setValueText(targetId, control.value);
+        return;
+      }
+
+      if (control.isContentEditable) {
+        setValueText(targetId, control.textContent);
+        return;
+      }
+
+      setValueText(targetId, control.textContent || control.value || '');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      // Attach listeners for all elements that have data-target
+      const all = Array.from(document.querySelectorAll('[data-target]'));
+      const clickCounts = new Map();
+
+      all.forEach(control => {
+        const tag = control.tagName.toLowerCase();
+        const type = (control.getAttribute('type') || '').toLowerCase();
+        const targetId = control.getAttribute('data-target');
+
+        // Initialize display from current value
+        updateValueForControl(control);
+
+        if (tag === 'input' && (type === 'text' || type === 'email' || type === 'number' || type === 'password' || type === 'search' || type === 'tel' || type === 'url')) {
+          control.addEventListener('input', () => updateValueForControl(control));
+          control.addEventListener('blur', () => updateValueForControl(control));
+        } else if (tag === 'textarea') {
+          control.addEventListener('input', () => updateValueForControl(control));
+        } else if (tag === 'input' && (type === 'checkbox' || type === 'radio' || type === 'file' || type === 'range' || type === 'color' || type === 'date' || type === 'time' || type === 'number')) {
+          control.addEventListener('change', () => updateValueForControl(control));
+          if (type === 'range' || type === 'color' || type === 'number') {
+            control.addEventListener('input', () => updateValueForControl(control));
+          }
+        } else if (tag === 'select') {
+          control.addEventListener('change', () => updateValueForControl(control));
+        } else if (control.isContentEditable) {
+          control.addEventListener('input', () => updateValueForControl(control));
+        } else if (tag === 'button' || (tag === 'input' && type === 'button')) {
+          clickCounts.set(control.id || control.getAttribute('data-testid') || Math.random(), 0);
+          control.addEventListener('click', (e) => {
+            e.preventDefault();
+            const key = control.id || control.getAttribute('data-testid');
+            const newCount = (clickCounts.get(key) || 0) + 1;
+            clickCounts.set(key, newCount);
+            setValueText(targetId, newCount);
+          });
+        } else if (tag === 'a') {
+          control.addEventListener('click', (e) => {
+            e.preventDefault();
+            setValueText(targetId, `clicked: ${new Date().toISOString()}`);
+          });
+        }
+      });
+
+      // Special handling for radio groups: update value when any radio changes
+      const radios = Array.from(document.querySelectorAll('input[type="radio"][data-target]'));
+      const radioNames = new Set(radios.map(r=>r.name));
+      radioNames.forEach(name=>{
+        const group = document.querySelectorAll(`input[type="radio"][name="${CSS.escape(name)}"]`);
+        group.forEach(r=>{
+          r.addEventListener('change', ()=>{
+            const target = r.getAttribute('data-target');
+            const checked = document.querySelector(`input[type="radio"][name="${CSS.escape(name)}"]:checked`);
+            setValueText(target, checked ? checked.value : null);
+          });
+        });
+      });
+
+      // Prefill & Reset handlers (only reference existing IDs)
+      document.getElementById('prefill').addEventListener('click', ()=>{
+        document.getElementById('input_text').value = 'abc';
+        document.getElementById('textarea_notes').value = 'Demo notes';
+        document.getElementById('input_number').value = 42;
+        document.getElementById('chk_subscribe').checked = true;
+        document.getElementById('interest_news').checked = true;
+        document.getElementById('prio_med').checked = true;
+        document.getElementById('select_one').value = 'option1';
+        document.getElementById('date_pick').value = new Date().toISOString().slice(0,10);
+        document.getElementById('color_picker').value = '#ff3366';
+        document.getElementById('range_scale').value = 75;
+        // trigger updates
+        all.forEach(updateValueForControl);
+      });
+
+      document.getElementById('resetAll').addEventListener('click', ()=>{
+        document.getElementById('input_text').value = '';
+        document.getElementById('textarea_notes').value = '';
+        document.getElementById('input_number').value = 0;
+        document.getElementById('chk_subscribe').checked = false;
+        document.querySelectorAll('input[name="interests"]').forEach(i=>i.checked=false);
+        document.querySelectorAll('input[name="priority"]').forEach(i=>i.checked=false);
+        document.getElementById('select_one').selectedIndex = 0;
+        document.getElementById('date_pick').value = '';
+        document.getElementById('color_picker').value = '#3366ff';
+        document.getElementById('range_scale').value = 50;
+        // update displays
+        all.forEach(updateValueForControl);
+      });
+
+      // Extra: allow Enter in text input to commit as well
+      const txt = document.getElementById('input_text');
+      txt.addEventListener('keypress', (e)=>{
+        if (e.key === 'Enter') {
+          updateValueForControl(txt);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
